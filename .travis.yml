@@ -1,0 +1,14 @@
+sudo: required
+
+language: bash
+services: docker
+
+env:
+ - DOCKER_IMAGE=ffmpeg
+
+script:
+  - docker build -t ${DOCKER_IMAGE} .
+
+after_script:
+  - docker images
+  - docker run -it ${DOCKER_IMAGE} ffmpeg -buildconf
