@@ -1,5 +1,5 @@
 # docker-ffmpeg
-An FFmpeg Dockerfile from source. Built on Alpine Linux.
+An FFmpeg Dockerfile built from source. Built on Alpine Linux.
 
 * ffmpeg 3.1.5 (compiled from source)
 
