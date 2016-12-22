@@ -3,9 +3,9 @@ An FFmpeg Dockerfile built from source. Built on Alpine Linux.
 
 * ffmpeg 3.1.5 (compiled from source)
 
-[![Docker Stars](https://img.shields.io/docker/stars/alfg/ffmpeg.svg)]()
-[![Docker Pulls](https://img.shields.io/docker/pulls/alfg/ffmpeg.svg)]()
-[![Docker Automated build](https://img.shields.io/docker/automated/alfg/ffmpeg.svg)]()
+[![Docker Stars](https://img.shields.io/docker/stars/alfg/ffmpeg.svg)](https://hub.docker.com/r/alfg/ffmpeg/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/alfg/ffmpeg.svg)](https://hub.docker.com/r/alfg/ffmpeg/)
+[![Docker Automated build](https://img.shields.io/docker/automated/alfg/ffmpeg.svg)](https://hub.docker.com/r/alfg/ffmpeg/builds/)
 [![Build Status](https://travis-ci.org/alfg/docker-ffmpeg.svg?branch=master)](https://travis-ci.org/alfg/docker-ffmpeg)
 
 ## Usage
