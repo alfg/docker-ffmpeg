@@ -9,12 +9,21 @@ An FFmpeg Dockerfile built from source. Built on Alpine Linux.
 [![Build Status](https://travis-ci.org/alfg/docker-ffmpeg.svg?branch=master)](https://travis-ci.org/alfg/docker-ffmpeg)
 
 ## Usage
+
+* Pull Docker image and run:
+```
+docker pull alfg/ffmpeg
+docker run -it --rm alfg/ffmpeg ffmpeg -buildconf
+```
+
+* or build and run container from source:
+
 ```
 docker build -t ffmpeg .
 docker run -it ffmpeg ffmpeg -buildconf
 ```
 
-or use as a base image in your Dockerfile:
+* or use as a base image in your Dockerfile:
 ```
 FROM alfg/ffmpeg:latest
 ```
