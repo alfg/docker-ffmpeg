@@ -1,7 +1,7 @@
 FROM alpine:3.4
 MAINTAINER Alfred Gutierrez <alf.g.jr@gmail.com>
 
-ENV FFMPEG_VERSION 3.1.5
+ENV FFMPEG_VERSION 3.3.2
 
 ## Build dependencies.
 RUN	apk update && apk add	\
