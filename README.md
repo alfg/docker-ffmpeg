@@ -1,7 +1,7 @@
 # docker-ffmpeg
 An FFmpeg Dockerfile built from source. Built on Alpine Linux.
 
-* ffmpeg 3.1.5 (compiled from source)
+* ffmpeg 3.3.2 (compiled from source)
 
 [![Docker Stars](https://img.shields.io/docker/stars/alfg/ffmpeg.svg)](https://hub.docker.com/r/alfg/ffmpeg/)
 [![Docker Pulls](https://img.shields.io/docker/pulls/alfg/ffmpeg.svg)](https://hub.docker.com/r/alfg/ffmpeg/)
@@ -30,7 +30,7 @@ FROM alfg/ffmpeg:latest
 
 ### FFmpeg Build
 ```
-ffmpeg version 3.1.5 Copyright (c) 2000-2016 the FFmpeg developers
+ffmpeg version 3.3.2 Copyright (c) 2000-2016 the FFmpeg developers
   built with gcc 5.3.0 (Alpine 5.3.0)
   configuration: --enable-version3 --enable-gpl --enable-nonfree --enable-small --enable-libmp3lame --enable-libx264 --enable-libx265 --enable-libvpx --enable-libtheora --enable-libvorbis --enable-libopus --enable-libfdk-aac --enable-libass --enable-libwebp --enable-librtmp --enable-postproc --enable-avresample --enable-libfreetype --enable-openssl --disable-debug
   libavutil      55. 28.100 / 55. 28.100
