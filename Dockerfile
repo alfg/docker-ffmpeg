@@ -45,4 +45,4 @@ RUN cd /tmp/ffmpeg-${FFMPEG_VERSION} && \
   && make && make install && make distclean
 
 # Cleanup.
-RUN rm -rf /var/cache/* /tmp/*
+RUN rm -rf /var/cache/apk/* /tmp/*
