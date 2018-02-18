@@ -1,13 +1,12 @@
 FROM alpine:3.4
-MAINTAINER Alfred Gutierrez <alf.g.jr@gmail.com>
+LABEL author Alfred Gutierrez <alf.g.jr@gmail.com>
 
-ENV FFMPEG_VERSION 3.3.2
+ENV FFMPEG_VERSION 3.4.2
 
-## Build dependencies.
+# Build dependencies.
 RUN	apk update && apk add	\
   gcc	binutils-libs binutils build-base	libgcc make pkgconf pkgconfig \
-  openssl openssl-dev ca-certificates pcre \
-  musl-dev libc-dev pcre-dev zlib-dev
+  openssl openssl-dev ca-certificates pcre musl-dev libc-dev pcre-dev zlib-dev
 
 # FFmpeg dependencies.
 RUN apk add nasm yasm-dev lame-dev libogg-dev x264-dev libvpx-dev libvorbis-dev \
