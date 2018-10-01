@@ -1,22 +1,39 @@
-FROM alpine:3.4
-LABEL author Alfred Gutierrez <alf.g.jr@gmail.com>
+###############################
+# Build the FFmpeg-build image.
+FROM alpine:latest as build
 
-ENV FFMPEG_VERSION 3.4.2
+ARG FFMPEG_VERSION=4.0.2
 
-# Build dependencies.
-RUN	apk update && apk add	\
-  gcc	binutils-libs binutils build-base	libgcc make pkgconf pkgconfig \
-  openssl openssl-dev ca-certificates pcre musl-dev libc-dev pcre-dev zlib-dev
+# FFmpeg build dependencies.
+RUN apk add --update \
+  build-base \
+  freetype-dev \
+  gcc \
+  lame-dev \
+  libogg-dev \
+  libass \
+  libass-dev \
+  libvpx-dev \
+  libvorbis-dev \
+  libwebp-dev \
+  libtheora-dev \
+  nasm \
+  opus-dev \
+  pkgconf \
+  pkgconfig \
+  rtmpdump-dev \
+  wget \
+  x264-dev \
+  x265-dev \
+  yasm-dev
 
-# FFmpeg dependencies.
-RUN apk add nasm yasm-dev lame-dev libogg-dev x264-dev libvpx-dev libvorbis-dev \
-  x265-dev freetype-dev libass-dev libwebp-dev rtmpdump-dev libtheora-dev opus-dev
 RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/testing >> /etc/apk/repositories
 RUN apk add --update fdk-aac-dev
 
 # Get ffmpeg source.
-RUN cd /tmp/ && wget http://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.gz \
-  && tar zxf ffmpeg-${FFMPEG_VERSION}.tar.gz && rm ffmpeg-${FFMPEG_VERSION}.tar.gz
+RUN cd /tmp/ && \
+  wget http://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.gz && \
+  tar zxf ffmpeg-${FFMPEG_VERSION}.tar.gz && rm ffmpeg-${FFMPEG_VERSION}.tar.gz
 
 # Compile ffmpeg.
 RUN cd /tmp/ffmpeg-${FFMPEG_VERSION} && \
@@ -45,3 +62,29 @@ RUN cd /tmp/ffmpeg-${FFMPEG_VERSION} && \
 
 # Cleanup.
 RUN rm -rf /var/cache/apk/* /tmp/*
+
+##########################
+# Build the release image.
+FROM alpine:latest
+LABEL MAINTAINER Alfred Gutierrez <alf.g.jr@gmail.com>
+
+RUN apk add --update \
+  ca-certificates \
+  openssl \
+  pcre \
+  lame \
+  libogg \
+  libass \
+  libvpx \
+  libvorbis \
+  libwebp \
+  libtheora \
+  opus \
+  rtmpdump \
+  x264-dev \
+  x265-dev
+
+COPY --from=build /usr/local /usr/local
+COPY --from=build /usr/lib/libfdk-aac.so.1 /usr/lib/libfdk-aac.so.1
+
+CMD ["/usr/local/bin/ffmpeg"]

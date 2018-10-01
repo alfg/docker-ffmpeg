@@ -1,7 +1,7 @@
 # docker-ffmpeg
 An FFmpeg Dockerfile built from source. Built on Alpine Linux.
 
-* ffmpeg 3.4.2 (compiled from source)
+* ffmpeg 4.0.2 (compiled from source)
 
 [![Docker Stars](https://img.shields.io/docker/stars/alfg/ffmpeg.svg)](https://hub.docker.com/r/alfg/ffmpeg/)
 [![Docker Pulls](https://img.shields.io/docker/pulls/alfg/ffmpeg.svg)](https://hub.docker.com/r/alfg/ffmpeg/)
@@ -30,18 +30,19 @@ FROM alfg/ffmpeg:latest
 
 ### FFmpeg Build
 ```
-ffmpeg version 3.4.2 Copyright (c) 2000-2018 the FFmpeg developers
-  built with gcc 5.3.0 (Alpine 5.3.0)
+ # ffmpeg -buildconf
+ffmpeg version 4.0.2 Copyright (c) 2000-2018 the FFmpeg developers
+  built with gcc 6.4.0 (Alpine 6.4.0)
   configuration: --enable-version3 --enable-gpl --enable-nonfree --enable-small --enable-libmp3lame --enable-libx264 --enable-libx265 --enable-libvpx --enable-libtheora --enable-libvorbis --enable-libopus --enable-libfdk-aac --enable-libass --enable-libwebp --enable-librtmp --enable-postproc --enable-avresample --enable-libfreetype --enable-openssl --disable-debug
-  libavutil      55. 78.100 / 55. 78.100
-  libavcodec     57.107.100 / 57.107.100
-  libavformat    57. 83.100 / 57. 83.100
-  libavdevice    57. 10.100 / 57. 10.100
-  libavfilter     6.107.100 /  6.107.100
-  libavresample   3.  7.  0 /  3.  7.  0
-  libswscale      4.  8.100 /  4.  8.100
-  libswresample   2.  9.100 /  2.  9.100
-  libpostproc    54.  7.100 / 54.  7.100
+  libavutil      56. 14.100 / 56. 14.100
+  libavcodec     58. 18.100 / 58. 18.100
+  libavformat    58. 12.100 / 58. 12.100
+  libavdevice    58.  3.100 / 58.  3.100
+  libavfilter     7. 16.100 /  7. 16.100
+  libavresample   4.  0.  0 /  4.  0.  0
+  libswscale      5.  1.100 /  5.  1.100
+  libswresample   3.  1.100 /  3.  1.100
+  libpostproc    55.  1.100 / 55.  1.100
 
   configuration:
     --enable-version3
