@@ -3,12 +3,18 @@
 FROM alpine:latest as build
 
 ARG FFMPEG_VERSION=4.0.2
+ARG AOM_VERSION=master
+
+ARG PREFIX=/opt/ffmpeg
+ARG PKG_CONFIG_PATH=/opt/ffmpeg/lib64/pkgconfig
+ARG LD_LIBRARY_PATH=/opt/ffmpeg/lib
+ARG MAKEFLAGS="-j2"
 
 # FFmpeg build dependencies.
 RUN apk add --update \
   build-base \
+  cmake \
   freetype-dev \
-  gcc \
   lame-dev \
   libogg-dev \
   libass \
@@ -17,31 +23,44 @@ RUN apk add --update \
   libvorbis-dev \
   libwebp-dev \
   libtheora-dev \
-  nasm \
+  libtool \
   opus-dev \
+  perl \
   pkgconf \
   pkgconfig \
+  python \
   rtmpdump-dev \
   wget \
   x264-dev \
   x265-dev \
-  yasm-dev
+  yasm
 
 RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/testing >> /etc/apk/repositories
 RUN apk add --update fdk-aac-dev
 
+# Build libaom for av1.
+RUN mkdir -p /tmp/aom && cd /tmp/ && \
+  wget https://aomedia.googlesource.com/aom/+archive/${AOM_VERSION}.tar.gz && \
+  tar zxf ${AOM_VERSION}.tar.gz && rm ${AOM_VERSION}.tar.gz && \
+  rm -rf CMakeCache.txt CMakeFiles && \
+  mkdir -p ./aom_build && \
+  cd ./aom_build && \
+  cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DBUILD_SHARED_LIBS=1 .. && \
+  make && make install
+
 # Get ffmpeg source.
 RUN cd /tmp/ && \
-  wget http://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.gz && \
-  tar zxf ffmpeg-${FFMPEG_VERSION}.tar.gz && rm ffmpeg-${FFMPEG_VERSION}.tar.gz
+  wget https://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2 && \
+  tar xjvf ffmpeg-snapshot.tar.bz2 && rm ffmpeg-snapshot.tar.bz2
 
 # Compile ffmpeg.
-RUN cd /tmp/ffmpeg-${FFMPEG_VERSION} && \
+RUN cd /tmp/ffmpeg && \
   ./configure \
   --enable-version3 \
   --enable-gpl \
   --enable-nonfree \
   --enable-small \
+  --enable-libaom \
   --enable-libmp3lame \
   --enable-libx264 \
   --enable-libx265 \
@@ -58,7 +77,13 @@ RUN cd /tmp/ffmpeg-${FFMPEG_VERSION} && \
   --enable-libfreetype \
   --enable-openssl \
   --disable-debug \
-  && make && make install && make distclean
+  --disable-doc \
+  --disable-ffplay \
+  --extra-cflags="-I${PREFIX}/include" \
+  --extra-ldflags="-L${PREFIX}/lib" \
+  --extra-libs="-lpthread -lm" \
+  --prefix="${PREFIX}" && \
+  make && make install && make distclean
 
 # Cleanup.
 RUN rm -rf /var/cache/apk/* /tmp/*
@@ -84,7 +109,8 @@ RUN apk add --update \
   x264-dev \
   x265-dev
 
-COPY --from=build /usr/local /usr/local
+COPY --from=build /opt/ffmpeg /opt/ffmpeg
 COPY --from=build /usr/lib/libfdk-aac.so.1 /usr/lib/libfdk-aac.so.1
+COPY --from=build /opt/ffmpeg/lib64/libaom.so.0 /usr/lib/libaom.so.0
 
-CMD ["/usr/local/bin/ffmpeg"]
+CMD ["/opt/ffmpeg/bin/ffmpeg"]
