@@ -4,6 +4,10 @@ FROM alpine:latest as build
 
 ARG FFMPEG_VERSION=4.0.2
 
+ARG PREFIX=/opt/ffmpeg
+ARG LD_LIBRARY_PATH=/opt/ffmpeg/lib
+ARG MAKEFLAGS="-j4"
+
 # FFmpeg build dependencies.
 RUN apk add --update \
   build-base \
@@ -17,7 +21,6 @@ RUN apk add --update \
   libvorbis-dev \
   libwebp-dev \
   libtheora-dev \
-  nasm \
   opus-dev \
   pkgconf \
   pkgconfig \
@@ -25,10 +28,11 @@ RUN apk add --update \
   wget \
   x264-dev \
   x265-dev \
-  yasm-dev
+  yasm
 
-RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/testing >> /etc/apk/repositories
-RUN apk add --update fdk-aac-dev
+# Get fdk-aac from testing.
+RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/testing >> /etc/apk/repositories && \
+  apk add --update fdk-aac-dev
 
 # Get ffmpeg source.
 RUN cd /tmp/ && \
@@ -58,7 +62,13 @@ RUN cd /tmp/ffmpeg-${FFMPEG_VERSION} && \
   --enable-libfreetype \
   --enable-openssl \
   --disable-debug \
-  && make && make install && make distclean
+  --disable-doc \
+  --disable-ffplay \
+  --extra-cflags="-I${PREFIX}/include" \
+  --extra-ldflags="-L${PREFIX}/lib" \
+  --extra-libs="-lpthread -lm" \
+  --prefix="${PREFIX}" && \
+  make && make install && make distclean
 
 # Cleanup.
 RUN rm -rf /var/cache/apk/* /tmp/*
@@ -67,6 +77,7 @@ RUN rm -rf /var/cache/apk/* /tmp/*
 # Build the release image.
 FROM alpine:latest
 LABEL MAINTAINER Alfred Gutierrez <alf.g.jr@gmail.com>
+ENV PATH=/opt/ffmpeg/bin:$PATH
 
 RUN apk add --update \
   ca-certificates \
@@ -84,7 +95,7 @@ RUN apk add --update \
   x264-dev \
   x265-dev
 
-COPY --from=build /usr/local /usr/local
+COPY --from=build /opt/ffmpeg /opt/ffmpeg
 COPY --from=build /usr/lib/libfdk-aac.so.1 /usr/lib/libfdk-aac.so.1
 
 CMD ["/usr/local/bin/ffmpeg"]
