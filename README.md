@@ -28,6 +28,14 @@ docker run -it ffmpeg ffmpeg -buildconf
 FROM alfg/ffmpeg:latest
 ```
 
+## FFmpeg Snapshot Builds
+For building ffmpeg from snapshot, see [snapshot/Dockerfile](/snapshot/Dockerfile) for FFmpeg snapshot builds including support for AV1 (libaom).
+
+Or pull from the Docker tag:
+```
+docker pull alfg/ffmpeg:snapshot
+```
+
 ### FFmpeg Build
 ```
  # ffmpeg -buildconf
