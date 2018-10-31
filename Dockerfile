@@ -2,13 +2,13 @@
 # Build the FFmpeg-build image.
 FROM alpine:latest as build
 
-ARG FFMPEG_VERSION=4.0.2
+ARG FFMPEG_VERSION=ffmpeg-snapshot.tar.bz2
 ARG AOM_VERSION=master
 
 ARG PREFIX=/opt/ffmpeg
 ARG PKG_CONFIG_PATH=/opt/ffmpeg/lib64/pkgconfig
 ARG LD_LIBRARY_PATH=/opt/ffmpeg/lib
-ARG MAKEFLAGS="-j2"
+ARG MAKEFLAGS="-j4"
 
 # FFmpeg build dependencies.
 RUN apk add --update \
@@ -35,8 +35,9 @@ RUN apk add --update \
   x265-dev \
   yasm
 
-RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/testing >> /etc/apk/repositories
-RUN apk add --update fdk-aac-dev
+# Install fdk-aac from testing.
+RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/testing >> /etc/apk/repositories && \
+  apk add --update fdk-aac-dev
 
 # Build libaom for av1.
 RUN mkdir -p /tmp/aom && cd /tmp/ && \
@@ -50,8 +51,8 @@ RUN mkdir -p /tmp/aom && cd /tmp/ && \
 
 # Get ffmpeg source.
 RUN cd /tmp/ && \
-  wget https://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2 && \
-  tar xjvf ffmpeg-snapshot.tar.bz2 && rm ffmpeg-snapshot.tar.bz2
+  wget https://ffmpeg.org/releases/${FFMPEG_VERSION} && \
+  tar xjvf ${FFMPEG_VERSION} && rm ${FFMPEG_VERSION}
 
 # Compile ffmpeg.
 RUN cd /tmp/ffmpeg && \
@@ -92,6 +93,7 @@ RUN rm -rf /var/cache/apk/* /tmp/*
 # Build the release image.
 FROM alpine:latest
 LABEL MAINTAINER Alfred Gutierrez <alf.g.jr@gmail.com>
+ENV PATH=/opt/ffmpeg/bin:$PATH
 
 RUN apk add --update \
   ca-certificates \
@@ -110,7 +112,7 @@ RUN apk add --update \
   x265-dev
 
 COPY --from=build /opt/ffmpeg /opt/ffmpeg
-COPY --from=build /usr/lib/libfdk-aac.so.1 /usr/lib/libfdk-aac.so.1
 COPY --from=build /opt/ffmpeg/lib64/libaom.so.0 /usr/lib/libaom.so.0
+COPY --from=build /usr/lib/libfdk-aac.so.1 /usr/lib/libfdk-aac.so.1
 
 CMD ["/opt/ffmpeg/bin/ffmpeg"]

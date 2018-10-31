@@ -3,3 +3,5 @@ version: '3'
 services:
   ffmpeg:
     build: .
+    volumes:
+      - ./tmp:/opt/tmp
