@@ -1,6 +1,6 @@
 ###############################
 # Build the FFmpeg-build image.
-FROM alpine:latest as build
+FROM alpine:3.8 as build
 
 ARG FFMPEG_VERSION=4.0.2
 
@@ -75,7 +75,7 @@ RUN rm -rf /var/cache/apk/* /tmp/*
 
 ##########################
 # Build the release image.
-FROM alpine:latest
+FROM alpine:3.8
 LABEL MAINTAINER Alfred Gutierrez <alf.g.jr@gmail.com>
 ENV PATH=/opt/ffmpeg/bin:$PATH
 
