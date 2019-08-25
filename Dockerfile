@@ -1,8 +1,8 @@
 ###############################
 # Build the FFmpeg-build image.
-FROM alpine:3.8 as build
+FROM alpine:3.10 as build
 
-ARG FFMPEG_VERSION=4.1.4
+ARG FFMPEG_VERSION=4.2
 
 ARG PREFIX=/opt/ffmpeg
 ARG LD_LIBRARY_PATH=/opt/ffmpeg/lib
