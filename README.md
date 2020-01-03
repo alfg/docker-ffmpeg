@@ -1,7 +1,7 @@
 # docker-ffmpeg
 An FFmpeg Dockerfile built from source. Built on Alpine Linux.
 
-* ffmpeg 4.2.1 (compiled from source)
+* ffmpeg 4.2.2 (compiled from source)
 
 [![Docker Stars](https://img.shields.io/docker/stars/alfg/ffmpeg.svg)](https://hub.docker.com/r/alfg/ffmpeg/)
 [![Docker Pulls](https://img.shields.io/docker/pulls/alfg/ffmpeg.svg)](https://hub.docker.com/r/alfg/ffmpeg/)
@@ -38,9 +38,7 @@ docker pull alfg/ffmpeg:snapshot
 
 ### FFmpeg Build
 ```
-ffmpeg -buildconf
-
-ffmpeg version 4.2.1 Copyright (c) 2000-2019 the FFmpeg developers
+ffmpeg version 4.2.2 Copyright (c) 2000-2019 the FFmpeg developers
   built with gcc 6.4.0 (Alpine 6.4.0)
   configuration: --enable-version3 --enable-gpl --enable-nonfree --enable-small --enable-libmp3lame --enable-libx264 --enable-libx265 --enable-libvpx --enable-libtheora --enable-libvorbis --enable-libopus --enable-libfdk-aac --enable-libass --enable-libwebp --enable-librtmp --enable-postproc --enable-avresample --enable-libfreetype --enable-openssl --disable-debug --disable-doc --disable-ffplay --extra-cflags=-I/opt/ffmpeg/include --extra-ldflags=-L/opt/ffmpeg/lib --extra-libs='-lpthread -lm' --prefix=/opt/ffmpeg
   libavutil      56. 31.100 / 56. 31.100
@@ -52,7 +50,6 @@ ffmpeg version 4.2.1 Copyright (c) 2000-2019 the FFmpeg developers
   libswscale      5.  5.100 /  5.  5.100
   libswresample   3.  5.100 /  3.  5.100
   libpostproc    55.  5.100 / 55.  5.100
-
   configuration:
     --enable-version3
     --enable-gpl
