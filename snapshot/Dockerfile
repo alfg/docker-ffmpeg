@@ -38,7 +38,7 @@ RUN apk add --update \
   yasm
 
 # Install fdk-aac from testing.
-RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/testing >> /etc/apk/repositories && \
+RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories && \
   apk add --update fdk-aac-dev
 
 # Build libaom for av1.
