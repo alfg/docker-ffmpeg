@@ -114,7 +114,7 @@ RUN apk add --update \
   x265-dev
 
 COPY --from=build /opt/ffmpeg /opt/ffmpeg
-COPY --from=build /opt/ffmpeg/lib64/libaom.so.0 /usr/lib/libaom.so.2
+COPY --from=build /opt/ffmpeg/lib64/libaom.so.2 /usr/lib/libaom.so.2
 COPY --from=build /usr/lib/libfdk-aac.so.2 /usr/lib/libfdk-aac.so.2
 
 CMD ["/opt/ffmpeg/bin/ffmpeg"]
