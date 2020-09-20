@@ -33,9 +33,13 @@ RUN apk add --update \
   x265-dev \
   yasm
 
-# Get fdk-aac from testing.
+# Get fdk-aac from community.
 RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories && \
   apk add --update fdk-aac-dev
+
+# Get rav1e from testing.
+RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/testing >> /etc/apk/repositories && \
+  apk add --update rav1e-dev
 
 # Get ffmpeg source.
 RUN cd /tmp/ && \
@@ -60,6 +64,7 @@ RUN cd /tmp/ffmpeg-${FFMPEG_VERSION} && \
   --enable-libass \
   --enable-libwebp \
   --enable-librtmp \
+  --enable-librav1e \
   --enable-postproc \
   --enable-avresample \
   --enable-libfreetype \
@@ -100,5 +105,6 @@ RUN apk add --update \
 
 COPY --from=build /opt/ffmpeg /opt/ffmpeg
 COPY --from=build /usr/lib/libfdk-aac.so.2 /usr/lib/libfdk-aac.so.2
+COPY --from=build /usr/lib/librav1e.so.0 /usr/lib/librav1e.so.0
 
 CMD ["/usr/local/bin/ffmpeg"]
