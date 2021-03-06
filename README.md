@@ -1,7 +1,7 @@
 # docker-ffmpeg
 An FFmpeg Dockerfile built from source. Built on Alpine Linux.
 
-* ffmpeg 4.3.1 (compiled from source)
+* ffmpeg 4.3.2 (compiled from source)
 
 [![Docker Stars](https://img.shields.io/docker/stars/alfg/ffmpeg.svg)](https://hub.docker.com/r/alfg/ffmpeg/)
 [![Docker Pulls](https://img.shields.io/docker/pulls/alfg/ffmpeg.svg)](https://hub.docker.com/r/alfg/ffmpeg/)
@@ -29,7 +29,7 @@ FROM alfg/ffmpeg:latest
 ```
 
 ## FFmpeg Snapshot Builds
-For building ffmpeg from snapshot, see [snapshot/Dockerfile](/snapshot/Dockerfile) for FFmpeg snapshot builds including support for AV1 (libaom).
+For building ffmpeg from snapshot, see [snapshot/Dockerfile](/snapshot/Dockerfile) for FFmpeg snapshot builds including support for libaom-av1.
 
 Or pull from the Docker tag:
 ```
@@ -38,9 +38,9 @@ docker pull alfg/ffmpeg:snapshot
 
 ### FFmpeg Build
 ```
-ffmpeg version 4.3.1 Copyright (c) 2000-2020 the FFmpeg developers
-  built with gcc 9.3.0 (Alpine 9.3.0)
-  configuration: --enable-version3 --enable-gpl --enable-nonfree --enable-small --enable-libmp3lame --enable-libx264 --enable-libx265 --enable-libvpx --enable-libtheora --enable-libvorbis --enable-libopus --enable-libfdk-aac --enable-libass --enable-libwebp --enable-librtmp --enable-postproc --enable-avresample --enable-libfreetype --enable-openssl --disable-debug --disable-doc --disable-ffplay --extra-cflags=-I/opt/ffmpeg/include --extra-ldflags=-L/opt/ffmpeg/lib --extra-libs='-lpthread -lm' --prefix=/opt/ffmpeg
+ffmpeg version 4.3.2 Copyright (c) 2000-2021 the FFmpeg developers
+  built with gcc 10.2.1 (Alpine 10.2.1_pre1) 20201203
+  configuration: --enable-version3 --enable-gpl --enable-nonfree --enable-small --enable-libmp3lame --enable-libx264 --enable-libx265 --enable-libvpx --enable-libtheora --enable-libvorbis --enable-libopus --enable-libfdk-aac --enable-libass --enable-libwebp --enable-librtmp --enable-librav1e --enable-postproc --enable-avresample --enable-libfreetype --enable-openssl --disable-debug --disable-doc --disable-ffplay --extra-cflags=-I/opt/ffmpeg/include --extra-ldflags=-L/opt/ffmpeg/lib --extra-libs='-lpthread -lm' --prefix=/opt/ffmpeg
   libavutil      56. 51.100 / 56. 51.100
   libavcodec     58. 91.100 / 58. 91.100
   libavformat    58. 45.100 / 58. 45.100
@@ -50,6 +50,7 @@ ffmpeg version 4.3.1 Copyright (c) 2000-2020 the FFmpeg developers
   libswscale      5.  7.100 /  5.  7.100
   libswresample   3.  7.100 /  3.  7.100
   libpostproc    55.  7.100 / 55.  7.100
+
   configuration:
     --enable-version3
     --enable-gpl
@@ -66,6 +67,7 @@ ffmpeg version 4.3.1 Copyright (c) 2000-2020 the FFmpeg developers
     --enable-libass
     --enable-libwebp
     --enable-librtmp
+    --enable-librav1e
     --enable-postproc
     --enable-avresample
     --enable-libfreetype
