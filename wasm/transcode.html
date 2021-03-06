@@ -1,0 +1,73 @@
+<html>                                                                                                                                            
+  <head>                                                                                                                                          
+    <style>                                                                                                                                       
+      html, body {                                                       
+        margin: 0;                                                       
+        width: 100%;                                                     
+        height: 100%                                                     
+      }                                                                  
+      body {                                                                                                                                      
+        display: flex;                                                   
+        flex-direction: column;
+        align-items: center;                                             
+      }   
+    </style>                                                                                                                                      
+  </head>                                                                
+  <body>                                                                 
+    <h3>Upload a video to transcode to mp4 (x264) and play!</h3>
+    <video id="output-video" controls></video><br/> 
+    <input type="file" id="uploader">                   
+    <p id="message">Remeber to wait for 5 seconds for ffmpeg.wasm to load</p>
+    <script type="text/javascript">                                                                                                               
+      const readFromBlobOrFile = (blob) => (
+        new Promise((resolve, reject) => {
+          const fileReader = new FileReader();
+          fileReader.onload = () => {
+            resolve(fileReader.result);
+          };
+          fileReader.onerror = ({ target: { error: { code } } }) => {
+            reject(Error(`File could not be read! Code=${code}`));
+          };
+          fileReader.readAsArrayBuffer(blob);
+        })
+      );
+      const message = document.getElementById('message');
+      const transcode = async ({ target: { files } }) => {
+        const { name } = files[0];
+        message.innerHTML = 'Writing file to MEMFS';
+        const data = await readFromBlobOrFile(files[0]);                                                                                          
+        Module.FS.writeFile(name, new Uint8Array(data));                                                                                          
+        const ffmpeg = Module.cwrap('proxy_main', 'number', ['number', 'number']);
+        const args = ['ffmpeg', '-hide_banner', '-nostdin', '-report', '-i', name, 'out.mp4'];
+        const argsPtr = Module._malloc(args.length * Uint32Array.BYTES_PER_ELEMENT);
+        args.forEach((s, idx) => {                                       
+          const buf = Module._malloc(s.length + 1);                      
+          Module.writeAsciiToMemory(s, buf);                                                                                                      
+          Module.setValue(argsPtr + (Uint32Array.BYTES_PER_ELEMENT * idx), buf, 'i32');
+        });                    
+        message.innerHTML = 'Start to transcode';                        
+        ffmpeg(args.length, argsPtr);
+
+        /*                                                               
+         * The execution of ffmpeg is not synchronized,                  
+         * so we need to parse the log file to check if completed.
+         */                                                              
+        const timer = setInterval(() => {               
+          const logFileName = Module.FS.readdir('.').find(name => name.endsWith('.log'));
+          if (typeof logFileName !== 'undefined') {                                                                                               
+            const log = String.fromCharCode.apply(null, Module.FS.readFile(logFileName));
+            if (log.includes("frames successfully decoded")) {
+              clearInterval(timer);                                      
+              message.innerHTML = 'Finish transcoding';
+              const out = Module.FS.readFile('out.mp4');
+              const video = document.getElementById('output-video');
+              video.src = URL.createObjectURL(new Blob([out.buffer], { type: 'video/mp4' }));
+            }                                                            
+          } 
+        }, 500);                                                         
+      };  
+      document.getElementById('uploader').addEventListener('change', transcode);
+    </script>                                                            
+    <script type="text/javascript" src="./dist/ffmpeg.js"></script>
+  </body>                         
+</html>     
