@@ -1,6 +1,6 @@
 ###############################
 # Build the FFmpeg-build image.
-FROM alpine:3.11 as build
+FROM alpine:3.13 as build
 
 ARG FFMPEG_VERSION=ffmpeg-snapshot.tar.bz2
 ARG AOM_VERSION=master
@@ -30,7 +30,6 @@ RUN apk add --update \
   perl \
   pkgconf \
   pkgconfig \
-  python \
   rtmpdump-dev \
   wget \
   x264-dev \
@@ -40,6 +39,10 @@ RUN apk add --update \
 # Install fdk-aac from testing.
 RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories && \
   apk add --update fdk-aac-dev
+
+# Get rav1e from testing.
+RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/testing >> /etc/apk/repositories && \
+  apk add --update rav1e-dev
 
 # Build libaom for av1.
 RUN mkdir -p /tmp/aom && cd /tmp/ && \
@@ -75,6 +78,7 @@ RUN cd /tmp/ffmpeg && \
   --enable-libass \
   --enable-libwebp \
   --enable-librtmp \
+  --enable-librav1e \
   --enable-postproc \
   --enable-avresample \
   --enable-libfreetype \
@@ -93,7 +97,7 @@ RUN rm -rf /var/cache/apk/* /tmp/*
 
 ##########################
 # Build the release image.
-FROM alpine:3.11
+FROM alpine:3.13
 LABEL MAINTAINER Alfred Gutierrez <alf.g.jr@gmail.com>
 ENV PATH=/opt/ffmpeg/bin:$PATH
 
@@ -114,7 +118,8 @@ RUN apk add --update \
   x265-dev
 
 COPY --from=build /opt/ffmpeg /opt/ffmpeg
-COPY --from=build /opt/ffmpeg/lib64/libaom.so.2 /usr/lib/libaom.so.2
 COPY --from=build /usr/lib/libfdk-aac.so.2 /usr/lib/libfdk-aac.so.2
+COPY --from=build /usr/lib/librav1e.so /usr/lib/librav1e.so
+COPY --from=build /opt/ffmpeg/lib64/libaom.so.2 /usr/lib/libaom.so.2
 
 CMD ["/opt/ffmpeg/bin/ffmpeg"]
