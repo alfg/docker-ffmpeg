@@ -28,6 +28,11 @@ docker run -it ffmpeg ffmpeg -buildconf
 FROM alfg/ffmpeg:latest
 ```
 
+* Example using a mounted volume:
+```
+docker run -v ${PWD}:/opt/tmp/ -it --rm alfg/ffmpeg ffmpeg -i /opt/tmp/input.mp4 -c copy output.mp4
+```
+
 ## FFmpeg Snapshot Builds
 For building ffmpeg from snapshot, see [snapshot/Dockerfile](/snapshot/Dockerfile) for FFmpeg snapshot builds including support for libaom-av1.
 
@@ -35,6 +40,8 @@ Or pull from the Docker tag:
 ```
 docker pull alfg/ffmpeg:snapshot
 ```
+
+The snapshot tag may be out of date. Build from [snapshot/Dockerfile](/snapshot/Dockerfile) to get the latest build.
 
 ### FFmpeg Build
 ```
