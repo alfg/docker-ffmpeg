@@ -1,7 +1,7 @@
 # docker-ffmpeg
 An FFmpeg Dockerfile built from source. Built on Alpine Linux.
 
-* ffmpeg 4.3.2 (compiled from source)
+* ffmpeg 4.4 (compiled from source). See [FFmpeg Build](#ffmpeg-build) for build configuration.
 
 [![Docker Stars](https://img.shields.io/docker/stars/alfg/ffmpeg.svg)](https://hub.docker.com/r/alfg/ffmpeg/)
 [![Docker Pulls](https://img.shields.io/docker/pulls/alfg/ffmpeg.svg)](https://hub.docker.com/r/alfg/ffmpeg/)
