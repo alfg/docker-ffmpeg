@@ -120,6 +120,6 @@ RUN apk add --update \
 COPY --from=build /opt/ffmpeg /opt/ffmpeg
 COPY --from=build /usr/lib/libfdk-aac.so.2 /usr/lib/libfdk-aac.so.2
 COPY --from=build /usr/lib/librav1e.so /usr/lib/librav1e.so
-COPY --from=build /opt/ffmpeg/lib64/libaom.so.2 /usr/lib/libaom.so.2
+COPY --from=build /opt/ffmpeg/lib64/libaom.so.3 /usr/lib/libaom.so.3
 
 CMD ["/opt/ffmpeg/bin/ffmpeg"]
