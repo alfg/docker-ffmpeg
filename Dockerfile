@@ -66,7 +66,6 @@ RUN cd /tmp/ffmpeg-${FFMPEG_VERSION} && \
   --enable-librtmp \
   --enable-librav1e \
   --enable-postproc \
-  --enable-avresample \
   --enable-libfreetype \
   --enable-openssl \
   --disable-debug \
